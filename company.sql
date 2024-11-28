@@ -4,25 +4,25 @@ PRAGMA foreign_keys = ON; -- Foreign key is by default off in sqlite, so we need
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users(
-    user_pk                 TEXT, --UNIQUE is not necessary
-    user_username           TEXT UNIQUE,
-    user_name               TEXT,
-    user_last_name          TEXT,
-    user_email              TEXT UNIQUE,
-    user_password           TEXT,
-    user_dob                TEXT,
-    user_created_at         TEXT,
-    user_updated_at         TEXT,
-    user_is_active          TEXT,
-    user_blocked_at         TEXT,
-    user_deleted_at         TEXT,
+    user_pk                 CHAR(36), --UNIQUE is not necessary
+    user_username           VARCHAR(20)     UNIQUE,
+    user_name               VARCHAR(20),
+    user_last_name          VARCHAR(20),
+    user_email              VARCHAR(255)    UNIQUE,
+    user_password           VARCHAR(50),
+    user_dob                BIGINT          UNSIGNED,
+    user_created_at         BIGINT          UNSIGNED,
+    user_updated_at         BIGINT          UNSIGNED,
+    user_is_active          BOOLEAN,
+    user_blocked_at         BIGINT          UNSIGNED,
+    user_deleted_at         BIGINT          UNSIGNED,
     PRIMARY KEY(user_pk) -- makes it unique
 )WITHOUT ROWID;
 
-INSERT INTO users VALUES ("1", "username_A", "A", "Aa", "a@a.com", "pass", "EPOCH", "0", "1", "DD/MM/YYYY", "1", "0");
-INSERT INTO users VALUES ("2", "username_B", "B", "Bb", "b@b.com", "pass", "EPOCH", "0", "1", "DD/MM/YYYY", "0", "0");
-INSERT INTO users VALUES ("3", "username_C", "C", "Cc", "c@c.com", "pass", "EPOCH", "0", "1", "DD/MM/YYYY", "0", "0");
-INSERT INTO users VALUES ("4", "username_D", "D", "Dd", "d@d.com", "pass", "EPOCH", "0", "1", "DD/MM/YYYY", "0", "1");
+INSERT INTO users VALUES ("8a505c5d-f7c0-4cbe-9e97-16e7ef6cfd60", "username_A", "A", "Aa", "a@a.com", "pass", "1732804223", "1732804223", "1732804223", "1", "0", "0");
+INSERT INTO users VALUES ("ea793097-bf74-4434-b506-024fbe1ad680", "username_B", "B", "Bb", "b@b.com", "pass", "1732804223", "1732804223", "1732804223", "1", "0", "0");
+INSERT INTO users VALUES ("7cb9bf5d-eeb7-4f1a-b837-3621415285a0", "username_C", "C", "Cc", "c@c.com", "pass", "1732804223", "1732804223", "0", "1", "0", "0");
+INSERT INTO users VALUES ("6d289cb7-7701-4296-b49e-641d39f6c5a7", "username_D", "D", "Dd", "d@d.com", "pass", "1732804223", "1732804223", "0", "1", "0", "0");
 
 SELECT * FROM users;
 
@@ -30,15 +30,15 @@ SELECT * FROM users;
 DROP TABLE IF EXISTS roles;
 
 CREATE TABLE roles(
-    role_pk                 TEXT, --UNIQUE is not necessary
-    role_name               TEXT UNIQUE,
+    role_pk                 CHAR(36), --UNIQUE is not necessary
+    role_name               VARCHAR(20) UNIQUE,
     PRIMARY KEY(role_pk) -- makes it unique
 )WITHOUT ROWID;
 
-INSERT INTO roles VALUES ("1", "customer");
-INSERT INTO roles VALUES ("2", "delivery person");
-INSERT INTO roles VALUES ("3", "restaurant owner");
-INSERT INTO roles VALUES ("4", "admin");
+INSERT INTO roles VALUES ("ade3e136-53fa-4f08-8993-159a4fd3ac0b", "customer");
+INSERT INTO roles VALUES ("09478ebd-c37c-4c97-9d16-271604093037", "delivery person");
+INSERT INTO roles VALUES ("a8e1777d-304e-4675-a1a1-6970f4c9ca68", "restaurant owner");
+INSERT INTO roles VALUES ("d3a75b5c-58cf-4d1b-a4b4-c1cce5eaa08d", "admin");
 
 SELECT * FROM roles;
 
@@ -46,21 +46,20 @@ SELECT * FROM roles;
 DROP TABLE IF EXISTS users_roles;
 
 CREATE TABLE users_roles(
-    user_fk                 TEXT,
-    role_fk                 TEXT,
+    user_fk                 CHAR(36),
+    role_fk                 CHAR(36),
     PRIMARY KEY(user_fk, role_fk),
     FOREIGN KEY(user_fk) REFERENCES users(user_pk) ON DELETE CASCADE,
     FOREIGN KEY(role_fk) REFERENCES roles(role_pk) ON DELETE CASCADE
-)WITHOUT ROWID;
+);
 
-INSERT INTO users_roles VALUES ("1", "1");
-INSERT INTO users_roles VALUES ("1", "2");
-INSERT INTO users_roles VALUES ("2", "3");
-INSERT INTO users_roles VALUES ("3", "2");
-INSERT INTO users_roles VALUES ("4", "1");
-INSERT INTO users_roles VALUES ("4", "3");
-INSERT INTO users_roles VALUES ("2", "1");
-INSERT INTO users_roles VALUES ("3", "1");
+INSERT INTO users_roles VALUES ("8a505c5d-f7c0-4cbe-9e97-16e7ef6cfd60", "ade3e136-53fa-4f08-8993-159a4fd3ac0b");
+INSERT INTO users_roles VALUES ("8a505c5d-f7c0-4cbe-9e97-16e7ef6cfd60", "09478ebd-c37c-4c97-9d16-271604093037");
+INSERT INTO users_roles VALUES ("ea793097-bf74-4434-b506-024fbe1ad680", "a8e1777d-304e-4675-a1a1-6970f4c9ca68");
+INSERT INTO users_roles VALUES ("ea793097-bf74-4434-b506-024fbe1ad680", "09478ebd-c37c-4c97-9d16-271604093037");
+INSERT INTO users_roles VALUES ("7cb9bf5d-eeb7-4f1a-b837-3621415285a0", "ade3e136-53fa-4f08-8993-159a4fd3ac0b");
+INSERT INTO users_roles VALUES ("7cb9bf5d-eeb7-4f1a-b837-3621415285a0", "ade3e136-53fa-4f08-8993-159a4fd3ac0b");
+INSERT INTO users_roles VALUES ("6d289cb7-7701-4296-b49e-641d39f6c5a7", "d3a75b5c-58cf-4d1b-a4b4-c1cce5eaa08d");
 
 SELECT * FROM users_roles;
 
@@ -70,14 +69,14 @@ SELECT * FROM users_roles;
 DROP TABLE IF EXISTS restaurants;
 
 CREATE TABLE restaurants(
-    restaurant_pk           TEXT, --UNIQUE is not necessary
-    restaurant_name         TEXT,
-    restaurant_adress       TEXT UNIQUE,
+    restaurant_pk           CHAR(36), --UNIQUE is not necessary
+    restaurant_name         VARCHAR(20),
+    restaurant_adress       VARCHAR(50) UNIQUE,
     PRIMARY KEY(restaurant_pk) -- makes it unique
 )WITHOUT ROWID;
 
-INSERT INTO restaurants VALUES ("1", "Lulu's Diner", "Lulu street 43");
-INSERT INTO restaurants VALUES ("2", "Bean the Bean", "Bean Avenue 22");
+INSERT INTO restaurants VALUES ("883d66a9-695e-48b8-856c-89936789d2a4", "Lulu's Diner", "Lulu street 43");
+INSERT INTO restaurants VALUES ("6a44aa2c-08c2-4b0e-ae2f-6e10669cd6f8", "Bean the Bean", "Bean Avenue 22");
 
 SELECT * FROM restaurants;
 
