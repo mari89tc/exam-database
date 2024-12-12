@@ -130,33 +130,27 @@ INSERT INTO orders_details VALUES ("d3f67813-e126-4e5b-b734-9fc84f4146d0", "8b98
 
 
 CREATE TABLE phones_numbers(
-    phone_number_pk             CHAR(8) UNIQUE,
-    user_fk                     CHAR(36),
-    PRIMARY KEY(phone_number_pk, user_fk),
-    FOREIGN KEY(user_fk) REFERENCES users(user_pk) ON DELETE CASCADE
+    phone_number_pk             CHAR(36),
+    phone_number                CHAR(8) UNIQUE,
+    PRIMARY KEY(phone_number_pk)
 );
-INSERT INTO phones_numbers VALUES ("73128322", "8a505c5d-f7c0-4cbe-9e97-16e7ef6cfd60");
-INSERT INTO phones_numbers VALUES ("76332873", "ea793097-bf74-4434-b506-024fbe1ad680");
-INSERT INTO phones_numbers VALUES ("76221873", "7cb9bf5d-eeb7-4f1a-b837-3621415285a0");
-INSERT INTO phones_numbers VALUES ("76342873", "6d289cb7-7701-4296-b49e-641d39f6c5a7");
-
 
 CREATE TABLE users_phones(
-    phone_number_fk           CHAR(8),
+    phone_number_fk           CHAR(36),
     user_fk                   CHAR(36),
     PRIMARY KEY(phone_number_fk, user_fk),
     FOREIGN KEY(user_fk) REFERENCES users(user_pk) ON DELETE CASCADE,
     FOREIGN KEY(phone_number_fk) REFERENCES phones_numbers(phone_number_pk) ON DELETE CASCADE
 );
-INSERT INTO users_phones VALUES ("73128322", "8a505c5d-f7c0-4cbe-9e97-16e7ef6cfd60");
-INSERT INTO users_phones VALUES ("76332873", "ea793097-bf74-4434-b506-024fbe1ad680");
-INSERT INTO users_phones VALUES ("76221873", "7cb9bf5d-eeb7-4f1a-b837-3621415285a0");
-INSERT INTO users_phones VALUES ("76342873", "6d289cb7-7701-4296-b49e-641d39f6c5a7");
+INSERT INTO phones_numbers VALUES 
+("11111111-aaaa-4cbe-9e97-111111111111", "73128322"),
+("22222222-bbbb-4434-b506-222222222222", "76332873"),
+("33333333-cccc-4f1a-b837-333333333333", "76221873"),
+("44444444-dddd-4296-b49e-444444444444", "76342873");
 
--- Adding a user with multiple phone numbers
-INSERT INTO phones_numbers VALUES ("73221234", "8a505c5d-f7c0-4cbe-9e97-16e7ef6cfd60");
-INSERT INTO users_phones VALUES ("73221234", "8a505c5d-f7c0-4cbe-9e97-16e7ef6cfd60");
+INSERT INTO users_phones VALUES 
+("11111111-aaaa-4cbe-9e97-111111111111", "8a505c5d-f7c0-4cbe-9e97-16e7ef6cfd60"),
+("22222222-bbbb-4434-b506-222222222222", "ea793097-bf74-4434-b506-024fbe1ad680"),
+("33333333-cccc-4f1a-b837-333333333333", "7cb9bf5d-eeb7-4f1a-b837-3621415285a0"),
+("44444444-dddd-4296-b49e-444444444444", "6d289cb7-7701-4296-b49e-641d39f6c5a7");
 
--- Another user sharing an existing phone number
-INSERT INTO phones_numbers VALUES ("76332873", "7cb9bf5d-eeb7-4f1a-b837-3621415285a0");
-INSERT INTO users_phones VALUES ("76332873", "7cb9bf5d-eeb7-4f1a-b837-3621415285a0");
