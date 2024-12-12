@@ -38,7 +38,7 @@ services:
     ports:
       - 8080:80
 
-  arangodb:
+  arangodb: #Document DB
     image: arangodb:latest
     container_name: database_arangodb_exam
     environment:
@@ -48,7 +48,7 @@ services:
     ports:
       - 8529:8529
 
-  arangodb2:
+  arangodb2: #Graph DB
     image: arangodb:latest
     container_name: database_arangodb_exam_2
     environment:
@@ -69,5 +69,5 @@ services:
 volumes:
   mysql_data:
   arangodb_data:
-  arangodb2_data:  # Added a separate volume for arangodb2
+  arangodb2_data: # Added a separate volume for arangodb2
   redis_data:
